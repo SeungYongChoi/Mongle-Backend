@@ -151,6 +151,13 @@ public class FirebaseCloudMessageService{
                                     .createScoped(List.of(fcmScope))
                     )
                     .build();
+
+            System.out.println("--------------------------------------------------------");
+            System.out.println(GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream()));
+            System.out.println("--------------------------------------------------------");
+            System.out.println(GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream()).createScoped(List.of(fcmScope)));
+            System.out.println("--------------------------------------------------------");
+
             if(FirebaseApp.getApps().isEmpty()){
                 FirebaseApp.initializeApp(options);
                 log.info("Firebase application has been initialized");
