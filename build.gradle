@@ -24,16 +24,35 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	//aws S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	//swagger
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+	//jwt
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	//katalk access token을 가져오기 위한 Oauth 서버와의 통신을 위한 webclient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	//json parser
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	//firebase sdk
+	implementation 'com.google.firebase:firebase-admin:6.8.1'
+	//okhttp
+	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version:'4.2.2'
 
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	//m1 netty..error..?
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64'
 
-	implementation 'com.google.code.gson:gson:2.9.0'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+
+jar {
+	enabled = false
 }
 
 tasks.named('test') {

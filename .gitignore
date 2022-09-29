@@ -4,6 +4,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+.DS_Store
+src/.DS_Store
 
 ### STS ###
 .apt_generated
@@ -38,3 +40,11 @@ out/
 
 ### properties ###
 application.properties
+application-local.properties
+application-dev.properties
+application-prod.properties
+
+google-services.json
+monglemongle-firebase-adminsdk-zrey9-3a66b2259a.json
+
+
