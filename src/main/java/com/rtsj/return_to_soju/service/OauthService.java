@@ -46,7 +46,7 @@ public class OauthService {
         KakaoRenewInfo renewKakaoToken = getRenewKakaoToken(kakaoRefreshToken);
         String accessToken = renewKakaoToken.getAccessToken();
         String refreshToken = renewKakaoToken.getRefreshToken();
-        ReissueTokenResponseDto kakaoTokenDto = new ReissueTokenResponseDto(accessToken, refreshToken);
+        ReissueTokenResponseDto kakaoTokenDto = new ReissueTokenResponseDto(accessToken, refreshToken, "test", "1234", "1234");
         return kakaoTokenDto;
     }
 

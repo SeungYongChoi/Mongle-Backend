@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface DailySentenceRepository extends JpaRepository<DailySentence, Long> {
     List<DailySentence> findByCalenderAndEmotion(Calender calender, Emotion emotion);
+    void deleteAllByCalenderAndRoomName(Calender calender, String roomName);
 }

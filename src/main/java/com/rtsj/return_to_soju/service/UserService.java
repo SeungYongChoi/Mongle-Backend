@@ -59,11 +59,12 @@ public class UserService {
             User user = findUser.get();
             user.updateKakaoName(nickName);
             user.updateKakaoToken(kakaoTokenDto);
-
+            dto.setName(user.getMongleName());
         }else{
             dto.setIsNew(true);
             User user = new User(userId, nickName, kakaoTokenDto, Role.ROLE_USER);
             userRepository.save(user);
+
         }
         String accessToken = jwtProvider.createAccessToken(String.valueOf(userId));
         String refreshToken = jwtProvider.createRefreshToken();

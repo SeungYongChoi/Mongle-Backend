@@ -10,8 +10,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReissueTokenResponseDto {
-    @Schema(example = "a;sdlfkaelsifjasldfjase;ife")
+    @Schema(description = "Mongle Access Token", example = "aldksfja;esoifjaslkdfaeafsdvsaer")
     private String accessToken;
-    @Schema(example = "asdlkjvalkefj;lkasvl;awneof")
+    @Schema(description = "Mongle Refresh Token", example = "a;dlksfjaewovnaslkdwfeawvscvewaew")
     private String refreshToken;
+    @Schema(description = "토큰타입", defaultValue = "Bearer", example = "Bearer")
+    private String tokenType;
+    @Schema(description = "Mongle Access ExpiredAt", example = "2022-09-03T10:15:30")
+    private String accessExpiredAt;
+    @Schema(description = "Mongle Refresh ExpiredAt", example = "2022-09-03T10:15:30")
+    private String refreshExpiredAt;
 }

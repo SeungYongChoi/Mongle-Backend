@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -16,6 +17,7 @@ public class KakaoMLDataSaveRequestDto {
     private String start_date;
     private String end_date;
     private Map<String, List<String>> keyword;
+    private String roomName;
 
 }
 

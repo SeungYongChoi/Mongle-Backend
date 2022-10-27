@@ -23,9 +23,11 @@ public class DailyTopic extends BaseEntity {
 
     @Column(name = "topic_name")
     private String name;
-    public DailyTopic(Calender calender, String topic){
+    private String roomName;
+    public DailyTopic(Calender calender, String topic, String roomName){
         this.calender = calender;
         this.name = topic;
+        this.roomName = roomName;
         calender.addTopic(this);
     }
 

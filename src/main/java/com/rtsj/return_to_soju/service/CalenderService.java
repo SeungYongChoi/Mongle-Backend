@@ -2,6 +2,7 @@ package com.rtsj.return_to_soju.service;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rtsj.return_to_soju.common.CalendarUtil;
 import com.rtsj.return_to_soju.exception.NotFoundUserException;
 import com.rtsj.return_to_soju.model.dto.response.CalenderBetweenMonthResponseDto;
 import com.rtsj.return_to_soju.model.dto.response.CalenderByDayDto;
@@ -44,6 +45,7 @@ public class CalenderService {
     @Value("${mongle.ml.chatbot.url}")
     public String chatbotURL;
 
+    private final CalendarUtil calendarUtil;
     @Transactional //User의 정보를 가져오는데 사용됨.. 추가로, UserRepository에서 캘린더를 빼오면 어떨까... 성능측면에서는 비슷해 보이는뎅..
     public List<CalenderBetweenMonthResponseDto> getEmotionBetweenMonth(Long userId, String start, String end) {
         String[] startDate = start.split("-");
@@ -53,12 +55,10 @@ public class CalenderService {
         int endYear = Integer.parseInt(endDate[0]);
         int endMonth = Integer.parseInt(endDate[1]);
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
-        Calendar cal = Calendar.getInstance();
-        cal.set(endYear, endMonth -1, 1);
         List<CalenderBetweenMonthResponseDto> responseDtoList = calenderRepository.findALLByUserAndDateBetween(
                         user,
                         LocalDate.of(startYear, startMonth, 1),
-                        LocalDate.of(endYear, endMonth, cal.getActualMaximum(Calendar.DAY_OF_MONTH))
+                        LocalDate.of(endYear, endMonth, calendarUtil.getMonthEndDay(endYear, endMonth))
                 )
                 .stream()
                 .map(CalenderBetweenMonthResponseDto::new)
@@ -68,7 +68,7 @@ public class CalenderService {
 
     @Transactional
     public void createDiary(Long userId, String year, String month, String day, String diaryText) throws IOException, ParseException {
-        LocalDate localDate = this.createLocalDateWithString(year, month, day);
+        LocalDate localDate = calendarUtil.createLocalDateWithYearMonthDay(year, month, day);
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
         Calender calender = findCalenderByUserAndLocalDate(user, localDate);
         String diaryFeedbackFromMLServer = getDiaryFeedbackFromMLServer(diaryText);
@@ -80,9 +80,12 @@ public class CalenderService {
     private String getDiaryFeedbackFromMLServer(String diary) throws WebClientResponseException, IOException, ParseException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
-        String urlParam = chatbotURL+diary;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("sentence", diary);
+        RequestBody requestBody = RequestBody.create(jsonObject.toString(), MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder()
-                .url(urlParam)
+                .url(chatbotURL)
+                .post(requestBody)
                 .build();
         Response response = client.newCall(request).execute();
         String string = response.body().string();
@@ -105,15 +108,9 @@ public class CalenderService {
         return optionalCalender.get();
     }
 
-    // year, month, day 가 인자로 들어왔을 때, LocalDate형식을 만들어서 반환
-    private LocalDate createLocalDateWithString(String year, String month, String day) {
-        String date = year + "-" + month + "-" + day;
-        return LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
-    }
-
     public List<SentenceByEmotionWithDayDto> getSentenceByEmotionWithDay(Long userId, String year, String month, String day, Emotion emotion) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
-        LocalDate localDate = this.createLocalDateWithString(year, month, day);
+        LocalDate localDate = calendarUtil.createLocalDateWithYearMonthDay(year, month, day);
         Calender calender = this.findCalenderByUserAndLocalDate(user, localDate);
 
         List<DailySentence> byCalenderAndEmotion = dailySentenceRepository.findByCalenderAndEmotion(calender, emotion);
@@ -127,8 +124,15 @@ public class CalenderService {
     @Transactional
     public CalenderByDayDto getDailyDataFromUser(Long userId, String year, String month, String day) {
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
-        LocalDate localDate = this.createLocalDateWithString(year, month, day);
+        LocalDate localDate = calendarUtil.createLocalDateWithYearMonthDay(year, month, day);
         Calender calender = this.findCalenderByUserAndLocalDate(user, localDate);
         return new CalenderByDayDto(calender);
+    }
+
+    @Transactional
+    public void changeEmotionByUserAndDate(Long userId, String year, String month, String day, Emotion emotion){
+        LocalDate localDate = calendarUtil.createLocalDateWithYearMonthDay(year, month, day);
+        Calender calenderByUserIdAndLocalDate = calenderRepository.findCalenderByUserIdAndLocalDate(userId, localDate);
+        calenderByUserIdAndLocalDate.updateEmotion(emotion);
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class FcmAnalyzeDate {
+public class FcmTypeAndData {
     private String type;
-    private String date;
+    private String data;
 }

@@ -9,6 +9,9 @@ public class EmotionScoreWithWeekDto {
 
     private Float score;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private int week;
+
+    public EmotionScoreWithWeekDto(int week) {
+        this.week = week;
+    }
 }

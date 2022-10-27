@@ -101,7 +101,6 @@ public class CalenderController {
         Long userId = jwtProvider.getUserIdByHeader(request);
         String diaryText = dto.getText();
         calenderService.createDiary(userId, year, month, day, diaryText);
-
         String uri = "/calender/" + year + "/" + month + "/" + day + "/diary";
         return ResponseEntity
                 .created(URI.create(uri))
@@ -131,5 +130,20 @@ public class CalenderController {
 
         return ResponseEntity.ok()
                 .body(sentenceByEmotionWithDay);
+    }
+
+
+    @PatchMapping("/calender/{year}/{month}/{day}/emotion")
+    public ResponseEntity<SuccessResponseResult> changeEmotionByUserAndDate(
+            @PathVariable(name = "year") String year,
+            @PathVariable(name = "month") String month,
+            @PathVariable(name = "day") String day,
+            @RequestParam("value") Emotion emotion,
+            HttpServletRequest request
+    ){
+        Long userId = jwtProvider.getUserIdByHeader(request);
+        calenderService.changeEmotionByUserAndDate(userId, year, month, day, emotion);
+        return ResponseEntity.ok()
+                .body(new SuccessResponseResult("변경 완료!"));
     }
 }

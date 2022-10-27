@@ -25,6 +25,6 @@ public class CalenderBetweenMonthResponseDto {
     public CalenderBetweenMonthResponseDto(Calender calender) {
         this.date = calender.getDate();
         this.emotion = calender.getEmotion();
-        this.subjectList = calender.getTopicList().stream().map(DailyTopic::getName).collect(Collectors.toList());
+        this.subjectList = calender.getTopicList().stream().limit(5).map(DailyTopic::getName).collect(Collectors.toList());
     }
 }

@@ -3,6 +3,7 @@ package com.rtsj.return_to_soju.controller;
 
 import com.rtsj.return_to_soju.common.SuccessResponseResult;
 import com.rtsj.return_to_soju.model.dto.request.KakaoMLDataSaveRequestDto;
+import com.rtsj.return_to_soju.model.dto.request.KakaoMLErrorRequestDto;
 import com.rtsj.return_to_soju.model.dto.response.UserInfoResponseDto;
 import com.rtsj.return_to_soju.service.FirebaseCloudMessageService;
 import com.rtsj.return_to_soju.service.MLService;
@@ -37,5 +38,15 @@ public class MLController {
         firebaseCloudMessageService.sendAnalyzeMessageTo(userFcmToken, "몽글몽글", "분석이 완료됐어요~!", start_date + "-" + end_date);
         return ResponseEntity.ok()
                 .body(new SuccessResponseResult("성공"));
+    }
+
+
+    @Operation(summary = "ML 에러 처리", description = "ML서버에서 Error를 반환할 경우 유저에게 push알림을 보낸다.")
+    @PostMapping("/ml/error")
+    public ResponseEntity<SuccessResponseResult> saveKakaoMLError(@RequestBody KakaoMLErrorRequestDto dto) throws IOException {
+        String userFcmToken = userService.getUserFcmToken(dto.getUser_pk());
+        firebaseCloudMessageService.sendErrorMessageTo(userFcmToken,"몽글몽글", "파일 업로드에 실패했어요:(");
+        return ResponseEntity.ok()
+                .body(new SuccessResponseResult("Error 메세지 전송"));
     }
 }

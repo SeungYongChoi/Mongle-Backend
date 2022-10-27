@@ -35,6 +35,8 @@ public class User extends BaseEntity implements Persistable<Long> {
     private LocalDateTime kakaoUpdate;
     @OneToMany(mappedBy = "user")
     private List<Calender> calenderList = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<KakaoRoom> roomList = new ArrayList<>();
 
     public User(Long id, String nickName, KakaoTokenDto kakaoTokenDto,  Role role){
         this.id = id;

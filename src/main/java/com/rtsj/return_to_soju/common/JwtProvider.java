@@ -120,7 +120,7 @@ public class JwtProvider {
         }
         Long userId = Long.parseLong(this.getPayload(request.getAccessToken()));
         String accessToken = this.createAccessToken(userId.toString());
-        return new ReissueTokenResponseDto(accessToken, request.getRefreshToken());
+        return new ReissueTokenResponseDto(accessToken, request.getRefreshToken(),"Bearer",getExpirationDate(accessToken), getExpirationDate(request.getRefreshToken()));
     }
 
 }
