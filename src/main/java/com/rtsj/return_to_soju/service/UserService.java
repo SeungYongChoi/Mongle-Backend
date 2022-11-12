@@ -5,6 +5,7 @@ import com.rtsj.return_to_soju.exception.NotFoundUserException;
 import com.rtsj.return_to_soju.model.dto.dto.KakaoTokenDto;
 import com.rtsj.return_to_soju.model.dto.dto.KakaoUserInfo;
 import com.rtsj.return_to_soju.model.dto.response.LoginResponseDto;
+import com.rtsj.return_to_soju.model.dto.response.ReissueTokenResponseDto;
 import com.rtsj.return_to_soju.model.dto.response.UserInfoResponseDto;
 import com.rtsj.return_to_soju.model.entity.User;
 import com.rtsj.return_to_soju.model.enums.Role;
@@ -86,6 +87,28 @@ public class UserService {
     public void SaveUserFcmToken(Long userId, String fcmToken){
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
         user.setFcmToken(fcmToken);
-        return;
     }
+
+    public void updateUserKakaoNickName(User user){
+        log.info("유저 토큰 재발급");
+        KakaoTokenDto kakaoToken = user.getKakaoToken();
+        ReissueTokenResponseDto reissueTokenResponseDto = oauthService.renewKakaoToken(kakaoToken.getRefreshToken());
+        kakaoToken.setAccessToken(reissueTokenResponseDto.getAccessToken());
+        if(reissueTokenResponseDto.getRefreshToken() != null){
+            log.info("유저 리프레쉬 토큰 재발급");
+            kakaoToken.setRefreshToken(reissueTokenResponseDto.getRefreshToken());
+        }
+        KakaoUserInfo kakaoUserInfo = oauthService.getKakaoUserInfoWithToken(kakaoToken);
+        user.updateKakaoName(kakaoUserInfo.getNickName());
+        user.updateKakaoToken(kakaoToken);
+        log.info("유저 닉네임 업데이트");
+    }
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+        String s = oauthService.unlinkUser(user);
+        userRepository.deleteById(Long.parseLong(s));
+    }
+
+
 }

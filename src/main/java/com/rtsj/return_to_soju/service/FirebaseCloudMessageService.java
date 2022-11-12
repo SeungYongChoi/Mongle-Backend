@@ -104,13 +104,7 @@ public class FirebaseCloudMessageService{
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
-                        .notification(
-                                FcmMessage.Notification.builder()
-                                .title(title)
-                                .body(body)
-                                .image(null)
-                                .build()
-                        )
+                        .data(new FcmTypeAndData(title, body))
                         .build()
                 )
                 .validate_only(false)
@@ -121,14 +115,7 @@ public class FirebaseCloudMessageService{
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
-                        .notification(
-                                FcmMessage.Notification.builder()
-                                        .title(title)
-                                        .body(body)
-                                        .image(null)
-                                        .build()
-                        )
-                        .data(new FcmTypeAndData("error","전송 실패"))
+                        .data(new FcmTypeAndData(title, body, "error", "전송 실패"))
                         .build()
                 )
                 .validate_only(false)
@@ -139,14 +126,7 @@ public class FirebaseCloudMessageService{
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(FcmMessage.Message.builder()
                         .token(targetToken)
-                        .notification(
-                                FcmMessage.Notification.builder()
-                                        .title(title)
-                                        .body(body)
-                                        .image(null)
-                                        .build()
-                        )
-                        .data(new FcmTypeAndData("analyze",date))
+                        .data(new FcmTypeAndData(title, body, "analyze", date))
                         .build()
                 )
                 .validate_only(false)
@@ -157,7 +137,7 @@ public class FirebaseCloudMessageService{
 
 
     private String getAccessToken() throws IOException{
-        String firebaseConfigPath = "firebase/"+keyName;
+        String firebaseConfigPath = "firebase/" +keyName;
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath)
                         .getInputStream())
@@ -168,7 +148,7 @@ public class FirebaseCloudMessageService{
 
     @PostConstruct
     public void init(){
-        String firebaseConfigPath = "firebase/"+keyName;
+        String firebaseConfigPath = "firebase/" +keyName;
         try{
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(

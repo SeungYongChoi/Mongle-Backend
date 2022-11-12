@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "and calender.emotion ='HAPPY' " +
             "order by Rand() LIMIT 1;", nativeQuery = true)
     LocalDate findMemoryByFcmToken(@Param("token")String token);
+
+    void deleteById(Long userId);
 }

@@ -20,10 +20,14 @@ public class SentenceByEmotionWithDayDto {
     @Schema(description = "감정")
     private Emotion emotion;
 
+    @Schema(description = "단톡방 이름")
+    private String roomName;
+
     public SentenceByEmotionWithDayDto(DailySentence dailySentence) {
         this.id = dailySentence.getId();
         this.sentence = dailySentence.getSentence();
         this.emotion = dailySentence.getEmotion();
+        this.roomName = dailySentence.getRoomName();
     }
 
 

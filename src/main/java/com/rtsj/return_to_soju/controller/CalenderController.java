@@ -95,17 +95,19 @@ public class CalenderController {
             @PathVariable(name = "year") String year,
             @PathVariable(name = "month") String month,
             @PathVariable(name = "day") String day,
-            @RequestBody WriteDiaryDto dto,
+            @RequestBody WriteDiaryDto data,
             HttpServletRequest request
     ) throws IOException, ParseException {
         Long userId = jwtProvider.getUserIdByHeader(request);
-        String diaryText = dto.getText();
-        calenderService.createDiary(userId, year, month, day, diaryText);
+        calenderService.createDiary(userId, year, month, day, data);
         String uri = "/calender/" + year + "/" + month + "/" + day + "/diary";
+
         return ResponseEntity
                 .created(URI.create(uri))
                 .body(new SuccessResponseResult("일기 등록 완료"));
     }
+
+
 
     @Operation(
             summary = "일자 및 감정별 대화 문장 불러오는 api (완료)",

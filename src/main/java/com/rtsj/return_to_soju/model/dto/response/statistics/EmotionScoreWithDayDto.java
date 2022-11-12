@@ -3,10 +3,12 @@ package com.rtsj.return_to_soju.model.dto.response.statistics;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rtsj.return_to_soju.model.dto.dto.EmotionCntWithDate;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Data
+@Getter
 public class EmotionScoreWithDayDto {
 
     private Float score;
@@ -51,6 +53,9 @@ public class EmotionScoreWithDayDto {
                         emotionCntWithDate.getTired() +
                         emotionCntWithDate.getSad();
 
+        if (totalCnt == 0) {
+            return;
+        }
         this.score = totalScore / totalCnt * 100 / 5;
         this.date = emotionCntWithDate.getDate();
 

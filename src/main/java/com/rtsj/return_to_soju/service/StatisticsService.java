@@ -37,7 +37,7 @@ public class StatisticsService {
         log.info(userId + "유저 " + startDate + "부터 " + endDate + "까지의 감정 점수 가져오기");
         List<EmotionCntWithDate> emotionCntWithDateList = calenderRepository.getEmotionStatisticsWithPeriod(userId, startDate, endDate);
 
-        return new EmotionScoreByWeekDto(emotionCntWithDateList);
+        return new EmotionScoreByWeekDto(emotionCntWithDateList, startDate);
 
     }
 

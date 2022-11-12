@@ -127,6 +127,13 @@ public class UserController {
         return kakaoToken;
     }
 
+    @DeleteMapping("/users")
+    public ResponseEntity leaveMongle(HttpServletRequest request) {
+        Long userId = jwtProvider.getUserIdByHeader(request);
+        userService.deleteUser(userId);
+
+        return ResponseEntity.status(204).body(null);
+    }
 
     @PostMapping("/test/gift")
     public void test(){

@@ -23,6 +23,7 @@ public class CalendarUtil {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
         return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 

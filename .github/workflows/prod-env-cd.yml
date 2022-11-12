@@ -86,20 +86,20 @@ jobs:
           docker stop mongle-backend
           docker run -d --rm --name mongle-backend -p 8080:8080 mongle-backend
           
-    - name: SSH proxy command - C
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.PROD_SERVER_IP_C }}
-        username: ec2-user
-        key: ${{ secrets.PRIVATE_PEM_KEY }}
-        proxy_host: ${{ secrets.BASTION_IP }} 
-        proxy_username: ec2-user
-        proxy_key: ${{ secrets.PUBLIC_PEM_KEY }}
-        envs: GITHUB_SHA
-        script: |
-          docker pull ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPOSITORY_PROD }}:${GITHUB_SHA::7}
-          docker tag ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPOSITORY_PROD }}:${GITHUB_SHA::7} mongle-backend
-          docker stop mongle-backend
-          docker run -d --rm --name mongle-backend -p 8080:8080 mongle-backend
+#     - name: SSH proxy command - C
+#       uses: appleboy/ssh-action@master
+#       with:
+#         host: ${{ secrets.PROD_SERVER_IP_C }}
+#         username: ec2-user
+#         key: ${{ secrets.PRIVATE_PEM_KEY }}
+#         proxy_host: ${{ secrets.BASTION_IP }} 
+#         proxy_username: ec2-user
+#         proxy_key: ${{ secrets.PUBLIC_PEM_KEY }}
+#         envs: GITHUB_SHA
+#         script: |
+#           docker pull ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPOSITORY_PROD }}:${GITHUB_SHA::7}
+#           docker tag ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_REPOSITORY_PROD }}:${GITHUB_SHA::7} mongle-backend
+#           docker stop mongle-backend
+#           docker run -d --rm --name mongle-backend -p 8080:8080 mongle-backend
 
   

@@ -59,7 +59,9 @@ public class User extends BaseEntity implements Persistable<Long> {
         this.kakaoAccessToken = kakaoTokenDto.getAccessToken();
         this.kakaoRefreshToken = kakaoTokenDto.getRefreshToken();
     }
-
+    public KakaoTokenDto getKakaoToken(){
+        return new KakaoTokenDto(this.kakaoAccessToken, this.kakaoRefreshToken);
+    }
     @Override
     public boolean isNew() {
         return getCreateDate() == null;
@@ -69,4 +71,7 @@ public class User extends BaseEntity implements Persistable<Long> {
     public void addCalender(Calender calender) {
         this.calenderList.add(calender);
     }
+
+
+
 }

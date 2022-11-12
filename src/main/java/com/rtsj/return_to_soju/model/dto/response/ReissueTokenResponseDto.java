@@ -20,4 +20,6 @@ public class ReissueTokenResponseDto {
     private String accessExpiredAt;
     @Schema(description = "Mongle Refresh ExpiredAt", example = "2022-09-03T10:15:30")
     private String refreshExpiredAt;
+
+
 }

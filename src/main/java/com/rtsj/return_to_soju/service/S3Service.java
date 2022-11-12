@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.rtsj.return_to_soju.common.CalendarUtil;
 import com.rtsj.return_to_soju.exception.NotFoundCalenderException;
 import com.rtsj.return_to_soju.exception.NotFoundUserException;
+import com.rtsj.return_to_soju.model.dto.dto.KakaoTokenDto;
 import com.rtsj.return_to_soju.model.entity.Calender;
 import com.rtsj.return_to_soju.model.entity.KakaoRoom;
 import com.rtsj.return_to_soju.model.entity.KakaoText;
@@ -43,9 +44,8 @@ public class S3Service {
     private final CalenderRepository calenderRepository;
     private final DailySentenceRepository dailySentenceRepository;
     private final DailyTopicRepository dailyTopicRepository;
-
-    private final String target = "카카오톡 대화";
     private final CalendarUtil calendarUtil;
+    private final UserService userService;
 
     private List<String> uploadFile(List<MultipartFile> files, String prefix, String dirname, String suffix, User user) {
         log.info("S3 파일올리는 로직 시작");
@@ -114,6 +114,9 @@ public class S3Service {
     public void uploadKakaoFile(List<MultipartFile> files, Long userId) {
         // 이 에러가 발생할 확률이 사실상 없지만 만약 발생하게 된다면 400번으로 나가는데 이게 옳을까..?
         User user = userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
+
+        userService.updateUserKakaoNickName(user);
+
         String prefix = user.getId() + "-" + user.getKakaoName() + "-";
 
         List<String> urls = this.uploadFile(files, prefix, "origin", ".txt", user);
