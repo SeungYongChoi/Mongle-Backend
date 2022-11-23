@@ -17,5 +17,15 @@ public class FcmMessage {
     public static class Message{
         private String token; //특정 디바이스 보내는 경우
         private FcmTypeAndData data;
+
+        public com.google.firebase.messaging.Message toFirebaseMessage() {
+            return com.google.firebase.messaging.Message.builder()
+                    .putData("type", data.getType())
+                    .putData("data", data.getData())
+                    .putData("title", data.getTitle())
+                    .putData("body", data.getBody())
+                    .setToken(token)
+                    .build();
+        }
     }
 }

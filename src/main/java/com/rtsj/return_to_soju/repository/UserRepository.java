@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -22,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "and calender.emotion ='HAPPY' " +
             "and calender.happy != 0 " +
             "order by Rand() LIMIT 1;", nativeQuery = true)
-    LocalDate findMemoryByFcmToken(@Param("token")String token);
+    Optional<LocalDate> findMemoryByFcmToken(@Param("token")String token);
 
     void deleteById(Long userId);
 }
