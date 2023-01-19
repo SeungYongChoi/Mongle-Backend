@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,12 +40,16 @@ public class FirebaseCloudMessageService{
     private final UserService userService;
     public void sendMessageListWithToken(List<String> fcmTokenList, String title, String body){
         List<Message> messages = fcmTokenList.stream().map(
-                token -> Message.builder()
-                        .putData("type","gift")
-                        .putData("date", userService.getUserMemoryDateByFcmToken(token))
-                        .setNotification(new Notification(title, body))
-                        .setToken(token)
-                        .build())
+                        token -> {
+                            String date = userService.getUserMemoryDateByFcmToken(token);
+                            if(date == null) return null;
+                            return FcmMessage.Message.builder()
+                                    .token(token)
+                                    .data(new FcmTypeAndData(title, body, "gift", date))
+                                    .build()
+                                    .toFirebaseMessage();
+                        })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         BatchResponse response;
         try{

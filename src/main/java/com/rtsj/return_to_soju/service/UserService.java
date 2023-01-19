@@ -42,8 +42,8 @@ public class UserService {
     }
 
     public String getUserMemoryDateByFcmToken(String token){
-        LocalDate memoryByFcmToken = userRepository.findMemoryByFcmToken(token);
-        return memoryByFcmToken.toString();
+        Optional<LocalDate> memoryByFcmToken = userRepository.findMemoryByFcmToken(token);
+        return memoryByFcmToken.map(LocalDate::toString).orElse(null);
     }
 
     @Transactional
